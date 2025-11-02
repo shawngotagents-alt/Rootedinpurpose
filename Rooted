@@ -1,564 +1,417 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rt in PRpse — Holiday MVP</title>
+  <title>Rt in PRpse - Holiday MVP</title>
   <style>
-    :root{ 
-      --green:#0f7b46;   /* evergreen */
-      --green-600:#0b5a34;
-      --green-100:#e7f3ec;
-      --red:#c62828;     /* holly red */
-      --red-700:#8b1c1c;
-      --red-100:#fdeaea;
-      --gold:#d4af37;
-      --ink:#192027;
-      --muted:#6b7280;
-      --bg:#fafafa;
-      --card:#ffffff;
-      --ring: rgba(198,40,40,.25);
+    :root{
+      --green:#1a8f5a;
+      --green-700:#0f6b41;
+      --red:#d22f27;
+      --red-700:#a3201a;
+      --gold:#e7c45a;
+      --bg:#0f1216;
+      --panel:#0f1419;
+      --elev:#121923;
+      --text:#e9eef5;
+      --muted:#a9b3c3;
+      --divider:#203042;
+      --ring: rgba(210,47,39,.35);
+      --radius:18px;
+      --shadow: 0 10px 40px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.15);
+      --blur: 14px;
     }
-
+    [data-theme="light"]{
+      --bg:#f4f6f9; --panel:#f7fafc; --elev:#ffffff; --text:#15202b; --muted:#475569; --divider:#e6edf5;
+      --shadow: 0 20px 50px rgba(21,32,43,.12), 0 2px 10px rgba(21,32,43,.06);
+    }
     *{box-sizing:border-box}
-    body{
-      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      background: var(--bg); color:var(--ink); line-height:1.5;
-    }
-    a{color:var(--green)}
-    header{
-      position:sticky; top:0; z-index:50; backdrop-filter:saturate(120%) blur(6px);
-      background:linear-gradient(90deg, var(--green) 0%, var(--green-600) 60%, var(--red-700) 100%);
-      color:#fff; border-bottom:2px solid rgba(255,255,255,.15);
-    }
-    .container{ max-width:1100px; margin-inline:auto; padding: 0 20px; }
-    .topbar{ display:flex; align-items:center; gap:14px; padding:14px 0; flex-wrap:wrap; }
-    .brand{ display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px; }
-    .badge{ background:var(--gold); color:#231800; font-weight:700; padding:2px 8px; border-radius:999px; font-size:12px; }
-    nav{ margin-left:auto; display:flex; gap:10px; flex-wrap:wrap; }
-    nav a{ color:#fff; text-decoration:none; padding:8px 10px; border-radius:10px; font-weight:600; }
-    nav a:hover{ background:rgba(255,255,255,.12) }
-
-    .hero{
-      background: radial-gradient(1200px 400px at 10% -10%, var(--red-100), transparent),
-                  radial-gradient(1000px 400px at 90% -20%, var(--green-100), transparent);
-      border-bottom:1px solid #eee;
-    }
-    .hero .wrap{ padding:40px 0 26px }
-    h1{ margin:0; font-size: clamp(28px, 4vw, 42px); }
-    .tagline{ color:#1f2937; max-width:60ch; margin-top:8px }
-    .cta{ display:flex; gap:12px; margin-top:16px; flex-wrap:wrap }
-    .btn{ appearance:none; border:0; padding:10px 14px; border-radius:12px; font-weight:700; cursor:pointer; }
-    .btn-primary{ background: linear-gradient(90deg, var(--green), var(--red)); color:#fff; }
-    .btn-outline{ background:#fff; color:var(--green); border:2px solid var(--green); }
-
-    .grid{ display:grid; gap:16px; grid-template-columns: repeat(12, 1fr); }
-    .card{ background:var(--card); border:1px solid #e5e7eb; border-radius:16px; padding:16px; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
-    .card h3{ margin:0 0 10px 0; font-size:20px }
-    .card .sub{ color:var(--muted); font-size: 13px; margin-top:-6px; margin-bottom:8px }
-    .section-title{ display:flex; align-items:baseline; justify-content:space-between; margin:22px 0 10px; }
-
-    /* inputs */
-    label{ font-weight:600; font-size:13px }
-    input, select, textarea{
-      width:100%; padding:10px 12px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:var(--ink);
-      outline: none; transition: box-shadow .15s, border-color .15s;
-    }
-    input:focus, select:focus, textarea:focus{ border-color:var(--red); box-shadow:0 0 0 4px var(--ring) }
-    textarea{ min-height:96px; resize:vertical }
-    .row{ display:grid; gap:12px; grid-template-columns:1fr 1fr }
-    .help{ font-size:12px; color:var(--muted) }
-
-    /* status chips */
-    .chip{ display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px; font-size:12px; font-weight:700 }
-    .chip-green{ background: var(--green-100); color: var(--green-600) }
-    .chip-red{ background: var(--red-100); color: var(--red-700) }
-
-    /* tables */
-    table{ width:100%; border-collapse:separate; border-spacing:0; }
-    th, td{ padding:10px 12px; text-align:left; border-bottom:1px solid #eee }
-    th{ font-size:12px; letter-spacing:.3px; text-transform:uppercase; color:var(--muted) }
-    tr:hover td{ background:#fafafa }
-
-    /* layout placements */
-    .span-12{ grid-column: span 12 }
-    .span-8{ grid-column: span 8 }
-    .span-4{ grid-column: span 4 }
-    .span-6{ grid-column: span 6 }
-
-    /* footer */
-    footer{ margin-top:36px; padding:24px 0; border-top:1px solid #eee; color:#4b5563; font-size:14px }
-
-    /* small screens */
-    @media (max-width:900px){
-      .row{ grid-template-columns:1fr }
-      .span-8, .span-6, .span-4{ grid-column: span 12 }
-      nav{ width:100%; margin-left:0 }
-    }
+    html,body{height:100%}
+    body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; color:var(--text);
+      background:linear-gradient(120deg, rgba(26,143,90,.07), rgba(210,47,39,.07)) fixed, var(--bg); accent-color: var(--green)}
+    a{color:var(--green); text-decoration:none}
+    .app{display:grid; grid-template-columns: 280px 1fr; gap:22px; min-height:100vh}
+    .panel{backdrop-filter: blur(var(--blur)); background: color-mix(in oklab, var(--elev) 90%, transparent); border:1px solid var(--divider); border-radius: var(--radius); box-shadow: var(--shadow)}
+    .sidebar{position:sticky; top:16px; height: calc(100vh - 32px); padding:18px}
+    .brand{display:flex; align-items:center; gap:12px; padding:8px 10px; border-radius:14px; background: linear-gradient(135deg, color-mix(in oklab, var(--green) 25%, transparent), color-mix(in oklab, var(--red) 25%, transparent)); border:1px solid var(--divider)}
+    .brand h1{font-size:18px; margin:0}
+    .tag{font-size:11px; letter-spacing:.25px; color:#fff; background: linear-gradient(90deg, var(--green), var(--red)); padding:2px 8px; border-radius:999px; font-weight:800}
+    .nav{margin-top:18px; display:grid; gap:8px}
+    .nav a{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; color:var(--text); border:1px solid transparent}
+    .nav a:hover{background: color-mix(in oklab, var(--elev) 85%, transparent); border-color: var(--divider)}
+    .nav a.active{background:linear-gradient(90deg, color-mix(in oklab, var(--green) 18%, var(--elev)), color-mix(in oklab, var(--red) 10%, var(--elev))); border-color: color-mix(in oklab, var(--green) 35%, var(--divider))}
+    .kudos{margin-top:auto; display:grid; gap:10px}
+    .mode{display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border:1px dashed var(--divider); border-radius:12px}
+    .header{position:sticky; top:16px; z-index:10; display:flex; align-items:center; gap:12px; padding:14px 18px; background: linear-gradient(135deg, color-mix(in oklab, var(--elev) 80%, transparent), transparent); border:1px solid var(--divider); border-radius: var(--radius)}
+    .chips{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; padding:6px 10px; border-radius:999px; border:1px solid var(--divider)}
+    .chip.g{background: color-mix(in oklab, var(--green) 12%, var(--elev)); color: color-mix(in oklab, var(--green) 80%, var(--text))}
+    .chip.r{background: color-mix(in oklab, var(--red) 12%, var(--elev)); color: color-mix(in oklab, var(--red) 80%, var(--text))}
+    .content{padding:16px 0 40px; display:grid; gap:18px}
+    .grid{display:grid; gap:18px; grid-template-columns: repeat(12, 1fr)}
+    .span-12{grid-column: span 12}
+    .span-8{grid-column: span 8}
+    .span-7{grid-column: span 7}
+    .span-6{grid-column: span 6}
+    .span-5{grid-column: span 5}
+    .span-4{grid-column: span 4}
+    .card{padding:16px; border-radius: calc(var(--radius) + 2px); border:1px solid var(--divider); background:linear-gradient(180deg, color-mix(in oklab, var(--elev) 90%, transparent), color-mix(in oklab, var(--elev) 75%, transparent)); box-shadow: var(--shadow)}
+    .card h3{margin:0 0 10px 0}
+    .sub{color:var(--muted); font-size:13px; margin-top:-6px; margin-bottom:10px}
+    label{font-size:12px; font-weight:800; letter-spacing:.2px}
+    input, select, textarea{width:100%; padding:12px 14px; border-radius:14px; border:1px solid var(--divider); background: color-mix(in oklab, var(--elev) 95%, transparent); color:var(--text); outline:none; transition:.15s}
+    input:focus, select:focus, textarea:focus{border-color: color-mix(in oklab, var(--red) 40%, var(--divider)); box-shadow: 0 0 0 5px var(--ring)}
+    textarea{min-height:110px; resize:vertical}
+    .row{display:grid; gap:12px; grid-template-columns: 1fr 1fr}
+    .btn{appearance:none; border:0; padding:10px 14px; border-radius:14px; font-weight:900; letter-spacing:.2px; cursor:pointer}
+    .btn-primary{color:#fff; background:linear-gradient(90deg, var(--green), var(--red)); box-shadow: 0 6px 18px rgba(210,47,39,.25)}
+    .btn-ghost{background:transparent; border:1px solid var(--divider); color:var(--text)}
+    table{width:100%; border-collapse:separate; border-spacing:0}
+    th, td{padding:10px 12px; border-bottom:1px dashed var(--divider); text-align:left}
+    th{font-size:11px; text-transform:uppercase; letter-spacing:.25px; color:var(--muted)}
+    .stripe{position:relative; overflow:hidden; border-radius: var(--radius); border:1px solid var(--divider); background: radial-gradient(1200px 300px at 10% -10%, color-mix(in oklab, var(--red) 18%, transparent), transparent), radial-gradient(800px 260px at 95% -15%, color-mix(in oklab, var(--green) 18%, transparent), transparent)}
+    .stripe .inner{padding:22px 18px; display:flex; align-items:center; gap:18px; flex-wrap:wrap}
+    .halo{width:44px; height:44px; border-radius:14px; background:conic-gradient(from 0deg, var(--green), var(--red), var(--green)); box-shadow: inset 0 0 0 6px rgba(255,255,255,.18)}
+    .fab{position:fixed; right:18px; bottom:18px; display:flex; gap:10px; z-index:50}
+    .fab .btn{padding:12px 16px}
+    .pill{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background: color-mix(in oklab, var(--elev) 95%, transparent); border:1px solid var(--divider)}
+    @media (max-width: 1060px){ .app{grid-template-columns: 1fr} .sidebar{position:static; height:auto} .row{grid-template-columns:1fr} .span-8,.span-7,.span-6,.span-5,.span-4{grid-column: span 12} }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <div class="topbar">
-        <div class="brand" aria-label="Rt in PRpse brand">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" fill="url(#g)" />
-            <path d="M12 6v12M6 12h12" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-            <defs>
-              <linearGradient id="g" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#0f7b46"/><stop offset="1" stop-color="#c62828"/>
-              </linearGradient>
-            </defs>
-          </svg>
+  <div style="max-width:1200px; margin-inline:auto; padding:16px; display:grid; gap:16px">
+    <div class="app">
+      <aside class="panel sidebar" aria-label="Sidebar">
+        <div class="brand">
+          <div class="halo" aria-hidden="true"></div>
           <div>
-            <div style="font-size:18px">Rt in PRpse</div>
-            <div class="badge" title="Rooted in Purpose">Rooted in Purpose</div>
+            <h1>Rt in PRpse</h1>
+            <div class="tag" title="Rooted in Purpose">Rooted in Purpose</div>
           </div>
         </div>
-        <nav aria-label="Primary">
-          <a href="#giving">Giving</a>
-          <a href="#prayers">Prayer Board</a>
-          <a href="#devotionals">Devotionals</a>
-          <a href="#announcements">Announcements</a>
-          <a href="#journal">Journal</a>
-          <a href="#volunteers">Volunteers</a>
+        <nav class="nav" aria-label="Primary">
+          <a class="active" href="#giving">💝 Giving</a>
+          <a href="#prayers">🙏 Prayer Board</a>
+          <a href="#devotionals">📖 Devotionals</a>
+          <a href="#announcements">📅 Announcements</a>
+          <a href="#journal">📝 Journal</a>
+          <a href="#volunteers">🧑‍🤝‍🧑 Volunteers</a>
         </nav>
-      </div>
-    </div>
-  </header>
-
-  <section class="hero">
-    <div class="container wrap">
-      <h1>Welcome to Rt in PRpse</h1>
-      <p class="tagline">A simple platform for small churches to manage giving, share prayers, schedule devotionals, post updates, and organize volunteers — all in one place with a festive green and red theme for the season.</p>
-      <div class="cta">
-        <a class="btn btn-primary" href="#giving">Give Now</a>
-        <a class="btn btn-outline" href="#devotionals">Today’s Devotional</a>
-      </div>
-    </div>
-  </section>
-
-  <main class="container" style="padding:22px 0 40px">
-
-    <!-- GIVING -->
-    <div id="giving" class="section-title">
-      <h2 style="margin:0">Tithes and Offerings</h2>
-      <span class="chip chip-green">Secure</span>
-    </div>
-    <div class="grid">
-      <div class="card span-8">
-        <h3>Online Giving</h3>
-        <p class="sub">Support your church with a one time gift or set up recurring giving.</p>
-        <form id="givingForm" onsubmit="return fakeSubmit(event, 'Thank you for your gift!')">
-          <div class="row">
-            <div>
-              <label for="amount">Amount (USD)</label>
-              <input id="amount" type="number" min="1" step="0.01" placeholder="50.00" required />
-              <p class="help">Example values: 10, 25, 50, 100</p>
-            </div>
-            <div>
-              <label for="frequency">Frequency</label>
-              <select id="frequency">
-                <option>One Time</option>
-                <option>Weekly</option>
-                <option>Biweekly</option>
-                <option>Monthly</option>
-              </select>
-            </div>
+        <div class="kudos">
+          <div class="mode">
+            <span>Appearance</span>
+            <button id="modeBtn" class="btn btn-ghost" type="button">Toggle light/dark</button>
           </div>
-          <div class="row">
-            <div>
-              <label for="fund">Fund</label>
-              <select id="fund">
-                <option>Tithes</option>
-                <option>Offering</option>
-                <option>Building</option>
-                <option>Missions</option>
-              </select>
-            </div>
-            <div>
-              <label for="name">Full Name</label>
-              <input id="name" type="text" placeholder="First Last" required />
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label for="email">Email</label>
-              <input id="email" type="email" placeholder="you@example.com" required />
-            </div>
-            <div>
-              <label for="note">Note (optional)</label>
-              <input id="note" type="text" placeholder="Blessings" />
-            </div>
-          </div>
-          <button class="btn btn-primary" type="submit">Give Securely</button>
-        </form>
-      </div>
-      <div class="card span-4">
-        <h3>Recent Giving</h3>
-        <table aria-label="recent gifts">
-          <thead><tr><th>Date</th><th>Fund</th><th>Amount</th></tr></thead>
-          <tbody id="givingTable">
-            <tr><td>11/02</td><td>Tithes</td><td>$100.00</td></tr>
-            <tr><td>10/26</td><td>Offering</td><td>$25.00</td></tr>
-            <tr><td>10/19</td><td>Building</td><td>$50.00</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- PRAYER BOARD -->
-    <div id="prayers" class="section-title">
-      <h2 style="margin:0">Prayer Board</h2>
-      <span class="chip chip-red">New this week</span>
-    </div>
-    <div class="grid">
-      <div class="card span-6">
-        <h3>Post a Prayer</h3>
-        <form id="prayerForm" onsubmit="return addPrayer(event)">
-          <div class="row">
-            <div>
-              <label for="prayerName">Name</label>
-              <input id="prayerName" placeholder="You can post as Anonymous" />
-            </div>
-            <div>
-              <label for="group">Group</label>
-              <select id="group">
-                <option>General</option>
-                <option>Men</option>
-                <option>Women</option>
-                <option>Youth</option>
-                <option>Choir</option>
-              </select>
-            </div>
-          </div>
-          <label for="prayerText">Request</label>
-          <textarea id="prayerText" placeholder="Type your prayer request" required></textarea>
-          <label style="display:flex; align-items:center; gap:8px; margin-top:8px">
-            <input id="anon" type="checkbox"> Post as Anonymous
-          </label>
-          <button class="btn btn-primary" type="submit">Share Request</button>
-        </form>
-      </div>
-      <div class="card span-6">
-        <h3>Requests</h3>
-        <div id="prayerList" aria-live="polite">
-          <details open class="card" style="padding:10px; margin-bottom:10px">
-            <summary><strong>For healing</strong> · <span class="chip chip-green">5 people praying</span></summary>
-            <p>Praying for recovery after surgery.</p>
-            <button class="btn btn-outline" onclick="incrementPrayers(this)">I prayed</button>
-          </details>
-          <details class="card" style="padding:10px">
-            <summary><strong>Guidance</strong> · <span class="chip chip-green">2 people praying</span></summary>
-            <p>Seeking direction for a new job.</p>
-            <button class="btn btn-outline" onclick="incrementPrayers(this)">I prayed</button>
-          </details>
+          <div class="chip g">Seasonal theme active</div>
         </div>
-      </div>
-    </div>
+      </aside>
 
-    <!-- DEVOTIONALS -->
-    <div id="devotionals" class="section-title">
-      <h2 style="margin:0">Devotional Scheduler</h2>
-      <span class="chip chip-green">Daily and Weekly</span>
-    </div>
-    <div class="grid">
-      <div class="card span-8">
-        <h3>Today’s Devotional</h3>
-        <p class="sub">“Let your roots grow down into Him.” Colossians 2:7</p>
-        <div class="row">
-          <div>
-            <label for="devFreq">Frequency</label>
-            <select id="devFreq" onchange="updateDevotionalPreview()">
-              <option value="daily" selected>Daily</option>
-              <option value="weekly">Weekly</option>
-            </select>
+      <main class="content">
+        <header class="header panel">
+          <div class="chips">
+            <div class="chip g">Evergreen</div>
+            <div class="chip r">Holly Red</div>
+            <div class="pill">Dec Services <strong style="margin-left:4px">6PM</strong></div>
           </div>
-          <div>
-            <label for="devTime">Reminder Time</label>
-            <input id="devTime" type="time" value="08:00" onchange="updateDevotionalPreview()" />
+          <div style="margin-left:auto; display:flex; gap:10px">
+            <a class="btn btn-ghost" href="#journal">New Journal</a>
+            <a class="btn btn-primary" href="#giving">Give Now</a>
           </div>
-        </div>
-        <label for="devPrompt">Prompt</label>
-        <textarea id="devPrompt" oninput="updateDevotionalPreview()">Reflect on one way you saw God’s faithfulness this week.</textarea>
-        <div class="card" style="background:var(--green-100); border-color: var(--green); margin-top:10px">
-          <strong>Preview</strong>
-          <p id="devPreview" style="margin:6px 0 0">Daily reminder at 08:00 — Reflect on one way you saw God’s faithfulness this week.</p>
-        </div>
-        <div style="margin-top:10px">
-          <button class="btn btn-primary" onclick="fakeSubmit(event, 'Devotional reminder saved')">Save Reminder</button>
-        </div>
-      </div>
-      <div class="card span-4">
-        <h3>Template Library</h3>
-        <ul id="templateList" style="margin:0; padding-left:18px">
-          <li>Gratitude: Name three blessings today.</li>
-          <li>Scripture: Meditate on Psalm 23.</li>
-          <li>Service: Plan one act of kindness.</li>
-          <li>Prayer: Pray for a neighbor.</li>
-        </ul>
-      </div>
-    </div>
+        </header>
 
-    <!-- ANNOUNCEMENTS -->
-    <div id="announcements" class="section-title">
-      <h2 style="margin:0">Monthly Announcements</h2>
-      <span class="chip chip-red">December Preview</span>
-    </div>
-    <div class="grid">
-      <div class="card span-6">
-        <h3>Create Announcement</h3>
-        <form id="announceForm" onsubmit="return addAnnouncement(event)">
-          <div class="row">
-            <div>
-              <label for="annTitle">Title</label>
-              <input id="annTitle" placeholder="Choir rehearsal" required />
-            </div>
-            <div>
-              <label for="annDate">Date</label>
-              <input id="annDate" type="date" required />
+        <section class="stripe panel" aria-labelledby="welcome">
+          <div class="inner">
+            <div style="display:grid; gap:6px; min-width:240px">
+              <h2 id="welcome" style="margin:0; font-size: clamp(22px, 3vw, 34px)">Welcome to Rt in PRpse</h2>
+              <p class="sub" style="max-width:60ch">A modern ministry hub for giving, prayer, devotionals, updates, and volunteers. Designed for small churches with a joyful holiday palette.</p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap">
+                <a class="btn btn-primary" href="#prayers">Share a Prayer</a>
+                <a class="btn btn-ghost" href="#devotionals">Today’s Devotional</a>
+              </div>
             </div>
           </div>
-          <label for="annBody">Details</label>
-          <textarea id="annBody" placeholder="Write details…" required></textarea>
-          <button class="btn btn-primary" type="submit">Post Announcement</button>
-        </form>
-      </div>
-      <div class="card span-6">
-        <h3>Bulletin</h3>
-        <ul id="bulletin" style="margin:0; padding-left:18px">
-          <li><strong>Christmas Service</strong> — Dec 24 at 6 PM</li>
-          <li><strong>Toy Drive</strong> — Drop off by Dec 15</li>
-        </ul>
-      </div>
-    </div>
+        </section>
 
-    <!-- JOURNAL -->
-    <div id="journal" class="section-title">
-      <h2 style="margin:0">Prayer Journal</h2>
-      <span class="chip chip-green">Private</span>
-    </div>
-    <div class="grid">
-      <div class="card span-8">
-        <h3>New Entry</h3>
-        <div class="row">
-          <div>
-            <label for="jTitle">Title</label>
-            <input id="jTitle" placeholder="Morning gratitude" />
+        <section id="giving" class="grid">
+          <div class="card panel span-7">
+            <h3>Tithes and Offerings</h3>
+            <p class="sub">One time gifts or recurring support</p>
+            <form id="givingForm" onsubmit="return fakeSubmit(event, 'Thank you for your gift!')">
+              <div class="row">
+                <div>
+                  <label for="amount">Amount (USD)</label>
+                  <input id="amount" type="number" min="1" step="0.01" placeholder="50.00" required />
+                </div>
+                <div>
+                  <label for="frequency">Frequency</label>
+                  <select id="frequency">
+                    <option>One Time</option>
+                    <option>Weekly</option>
+                    <option>Biweekly</option>
+                    <option>Monthly</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div>
+                  <label for="fund">Fund</label>
+                  <select id="fund">
+                    <option>Tithes</option>
+                    <option>Offering</option>
+                    <option>Building</option>
+                    <option>Missions</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="name">Full Name</label>
+                  <input id="name" type="text" placeholder="First Last" required />
+                </div>
+              </div>
+              <div class="row">
+                <div>
+                  <label for="email">Email</label>
+                  <input id="email" type="email" placeholder="you@example.com" required />
+                </div>
+                <div>
+                  <label for="note">Note (optional)</label>
+                  <input id="note" type="text" placeholder="Blessings" />
+                </div>
+              </div>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px">
+                <button class="btn btn-primary" type="submit">Give Securely</button>
+                <button class="btn btn-ghost" type="button" onclick="prefill(25)">$25</button>
+                <button class="btn btn-ghost" type="button" onclick="prefill(50)">$50</button>
+                <button class="btn btn-ghost" type="button" onclick="prefill(100)">$100</button>
+              </div>
+            </form>
           </div>
-          <div>
-            <label for="jDate">Date</label>
-            <input id="jDate" type="date" />
+          <div class="card panel span-5">
+            <h3>Recent Giving</h3>
+            <table aria-label="recent gifts">
+              <thead><tr><th>Date</th><th>Fund</th><th>Amount</th></tr></thead>
+              <tbody id="givingTable">
+                <tr><td>11/02</td><td>Tithes</td><td>$100.00</td></tr>
+                <tr><td>10/26</td><td>Offering</td><td>$25.00</td></tr>
+                <tr><td>10/19</td><td>Building</td><td>$50.00</td></tr>
+              </tbody>
+            </table>
           </div>
-        </div>
-        <label for="jPrompt">Guided Reflection</label>
-        <textarea id="jPrompt">Where did you sense peace today?</textarea>
-        <label for="jBody">Notes</label>
-        <textarea id="jBody" placeholder="Write your thoughts…"></textarea>
-        <button class="btn btn-primary" onclick="saveJournal()">Save Entry</button>
-        <button class="btn btn-outline" onclick="exportJournal()">Export as JSON</button>
-      </div>
-      <div class="card span-4">
-        <h3>Saved Entries</h3>
-        <ul id="journalList" style="margin:0; padding-left:18px">
-          <li>10/19 — Trust and patience</li>
-          <li>10/26 — Gratitude list</li>
-        </ul>
-      </div>
-    </div>
+        </section>
 
-    <!-- VOLUNTEERS -->
-    <div id="volunteers" class="section-title">
-      <h2 style="margin:0">Volunteer Rotation</h2>
-      <span class="chip chip-red">Auto schedule</span>
-    </div>
-    <div class="grid">
-      <div class="card span-8">
-        <h3>Build Rotation</h3>
-        <div class="row">
-          <div>
-            <label for="team">Team</label>
-            <select id="team" onchange="renderRoster()">
-              <option value="ushers" selected>Ushers</option>
-              <option value="greeters">Greeters</option>
-              <option value="choir">Choir</option>
-            </select>
+        <section id="prayers" class="grid">
+          <div class="card panel span-6">
+            <h3>Post a Prayer</h3>
+            <form id="prayerForm" onsubmit="return addPrayer(event)">
+              <div class="row">
+                <div>
+                  <label for="prayerName">Name</label>
+                  <input id="prayerName" placeholder="You can post as Anonymous" />
+                </div>
+                <div>
+                  <label for="group">Group</label>
+                  <select id="group">
+                    <option>General</option>
+                    <option>Men</option>
+                    <option>Women</option>
+                    <option>Youth</option>
+                    <option>Choir</option>
+                  </select>
+                </div>
+              </div>
+              <label for="prayerText">Request</label>
+              <textarea id="prayerText" placeholder="Type your prayer request" required></textarea>
+              <label style="display:flex; align-items:center; gap:8px; margin-top:8px">
+                <input id="anon" type="checkbox"> Post as Anonymous
+              </label>
+              <button class="btn btn-primary" type="submit">Share Request</button>
+            </form>
           </div>
-          <div>
-            <label for="weeks">Weeks</label>
-            <input id="weeks" type="number" min="1" max="12" value="4" />
+          <div class="card panel span-6">
+            <h3>Requests</h3>
+            <div id="prayerList" aria-live="polite">
+              <details open class="card" style="padding:10px; margin-bottom:10px">
+                <summary><strong>For healing</strong> · <span class="pill">5 praying</span></summary>
+                <p>Praying for recovery after surgery.</p>
+                <button class="btn btn-ghost" onclick="incrementPrayers(this)">I prayed</button>
+              </details>
+              <details class="card" style="padding:10px">
+                <summary><strong>Guidance</strong> · <span class="pill">2 praying</span></summary>
+                <p>Seeking direction for a new job.</p>
+                <button class="btn btn-ghost" onclick="incrementPrayers(this)">I prayed</button>
+              </details>
+            </div>
           </div>
-        </div>
-        <label for="names">Roster (comma separated)</label>
-        <input id="names" value="Ava, Noah, Liam, Mia, Ezra, Zoe" />
-        <button class="btn btn-primary" onclick="generateSchedule()">Generate Schedule</button>
-        <div class="card" style="margin-top:12px">
-          <table id="scheduleTable">
-            <thead><tr><th>Week</th><th>Assignments</th></tr></thead>
-            <tbody>
-              <tr><td>1</td><td>Ava, Noah</td></tr>
-              <tr><td>2</td><td>Liam, Mia</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="card span-4">
-        <h3>Reminders</h3>
-        <label style="display:flex; align-items:center; gap:8px">
-          <input id="sms" type="checkbox" checked> Send SMS reminders
-        </label>
-        <label style="display:flex; align-items:center; gap:8px; margin-top:6px">
-          <input id="emailR" type="checkbox" checked> Send Email reminders
-        </label>
-        <button class="btn btn-outline" style="margin-top:10px" onclick="fakeSubmit(event, 'Reminders saved')">Save</button>
-      </div>
-    </div>
+        </section>
 
-  </main>
+        <section id="devotionals" class="grid">
+          <div class="card panel span-8">
+            <h3>Devotional Scheduler</h3>
+            <p class="sub">Let your roots grow down into Him. Colossians 2:7</p>
+            <div class="row">
+              <div>
+                <label for="devFreq">Frequency</label>
+                <select id="devFreq" onchange="updateDevotionalPreview()">
+                  <option value="daily" selected>Daily</option>
+                  <option value="weekly">Weekly</option>
+                </select>
+              </div>
+              <div>
+                <label for="devTime">Reminder Time</label>
+                <input id="devTime" type="time" value="08:00" onchange="updateDevotionalPreview()" />
+              </div>
+            </div>
+            <label for="devPrompt">Prompt</label>
+            <textarea id="devPrompt" oninput="updateDevotionalPreview()">Reflect on one way you saw God's faithfulness this week.</textarea>
+            <div class="card" style="background: color-mix(in oklab, var(--green) 12%, var(--elev)); border-color: color-mix(in oklab, var(--green) 40%, var(--divider)); margin-top:10px">
+              <strong>Preview</strong>
+              <p id="devPreview" style="margin:6px 0 0">Daily reminder at 08:00 - Reflect on one way you saw God's faithfulness this week.</p>
+            </div>
+            <div style="margin-top:10px">
+              <button class="btn btn-primary" onclick="fakeSubmit(event, 'Devotional reminder saved')">Save Reminder</button>
+            </div>
+          </div>
+          <div class="card panel span-4">
+            <h3>Template Library</h3>
+            <ul id="templateList" style="margin:0; padding-left:18px">
+              <li>Gratitude: Name three blessings today.</li>
+              <li>Scripture: Meditate on Psalm 23.</li>
+              <li>Service: Plan one act of kindness.</li>
+              <li>Prayer: Pray for a neighbor.</li>
+            </ul>
+          </div>
+        </section>
 
-  <footer>
-    <div class="container">
-      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
-        <span>© <span id="yr"></span> Rt in PRpse</span>
-        <span aria-hidden>•</span>
-        <span>Made with care for small churches</span>
-      </div>
+        <section id="announcements" class="grid">
+          <div class="card panel span-6">
+            <h3>Create Announcement</h3>
+            <form id="announceForm" onsubmit="return addAnnouncement(event)">
+              <div class="row">
+                <div>
+                  <label for="annTitle">Title</label>
+                  <input id="annTitle" placeholder="Choir rehearsal" required />
+                </div>
+                <div>
+                  <label for="annDate">Date</label>
+                  <input id="annDate" type="date" required />
+                </div>
+              </div>
+              <label for="annBody">Details</label>
+              <textarea id="annBody" placeholder="Write details..." required></textarea>
+              <button class="btn btn-primary" type="submit">Post Announcement</button>
+            </form>
+          </div>
+          <div class="card panel span-6">
+            <h3>Bulletin</h3>
+            <ul id="bulletin" style="margin:0; padding-left:18px">
+              <li><strong>Christmas Service</strong> - Dec 24 at 6 PM</li>
+              <li><strong>Toy Drive</strong> - Drop off by Dec 15</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="journal" class="grid">
+          <div class="card panel span-8">
+            <h3>Prayer Journal</h3>
+            <div class="row">
+              <div>
+                <label for="jTitle">Title</label>
+                <input id="jTitle" placeholder="Morning gratitude" />
+              </div>
+              <div>
+                <label for="jDate">Date</label>
+                <input id="jDate" type="date" />
+              </div>
+            </div>
+            <label for="jPrompt">Guided Reflection</label>
+            <textarea id="jPrompt">Where did you sense peace today?</textarea>
+            <label for="jBody">Notes</label>
+            <textarea id="jBody" placeholder="Write your thoughts..."></textarea>
+            <div style="display:flex; gap:10px; flex-wrap:wrap">
+              <button class="btn btn-primary" onclick="saveJournal()">Save Entry</button>
+              <button class="btn btn-ghost" onclick="exportJournal()">Export as JSON</button>
+            </div>
+          </div>
+          <div class="card panel span-4">
+            <h3>Saved Entries</h3>
+            <ul id="journalList" style="margin:0; padding-left:18px">
+              <li>10/19 - Trust and patience</li>
+              <li>10/26 - Gratitude list</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="volunteers" class="grid">
+          <div class="card panel span-8">
+            <h3>Volunteer Rotation</h3>
+            <div class="row">
+              <div>
+                <label for="team">Team</label>
+                <select id="team" onchange="renderRoster()">
+                  <option value="ushers" selected>Ushers</option>
+                  <option value="greeters">Greeters</option>
+                  <option value="choir">Choir</option>
+                </select>
+              </div>
+              <div>
+                <label for="weeks">Weeks</label>
+                <input id="weeks" type="number" min="1" max="12" value="4" />
+              </div>
+            </div>
+            <label for="names">Roster (comma separated)</label>
+            <input id="names" value="Ava, Noah, Liam, Mia, Ezra, Zoe" />
+            <button class="btn btn-primary" onclick="generateSchedule()">Generate Schedule</button>
+            <div class="card" style="margin-top:12px">
+              <table id="scheduleTable">
+                <thead><tr><th>Week</th><th>Assignments</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Ava, Noah</td></tr>
+                  <tr><td>2</td><td>Liam, Mia</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card panel span-4">
+            <h3>Reminders</h3>
+            <label style="display:flex; align-items:center; gap:8px">
+              <input id="sms" type="checkbox" checked> Send SMS reminders
+            </label>
+            <label style="display:flex; align-items:center; gap:8px; margin-top:6px">
+              <input id="emailR" type="checkbox" checked> Send Email reminders
+            </label>
+            <button class="btn btn-ghost" style="margin-top:10px" onclick="fakeSubmit(event, 'Reminders saved')">Save</button>
+          </div>
+        </section>
+
+        <footer class="panel" style="padding:16px; display:flex; gap:10px; align-items:center; justify-content:space-between">
+          <div>© <span id="yr"></span> Rt in PRpse</div>
+          <div style="display:flex; gap:10px"><span class="pill">Small Church SaaS</span><span class="pill">v0.2</span></div>
+        </footer>
+      </main>
     </div>
-  </footer>
+  </div>
+
+  <div class="fab">
+    <a class="btn btn-primary" href="#giving">Give</a>
+    <a class="btn btn-ghost" href="#prayers">Prayer</a>
+  </div>
 
   <script>
-    // util
-    const toast = (msg) => {
-      const t = document.createElement('div');
-      t.textContent = msg;
-      t.style.cssText = 'position:fixed;inset:auto 20px 20px auto;background:linear-gradient(90deg,var(--green),var(--red));color:#fff;padding:10px 14px;border-radius:12px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.2);z-index:1000';
-      document.body.appendChild(t);
-      setTimeout(()=>t.remove(), 2000);
-    }
+    const toast = (msg) => { const t = document.createElement('div'); t.textContent = msg; t.style.cssText = 'position:fixed;inset:auto 18px 18px auto;background:linear-gradient(90deg,var(--green),var(--red));color:#fff;padding:12px 16px;border-radius:14px;font-weight:900;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:1000'; document.body.appendChild(t); setTimeout(()=>t.remove(), 1800); }
     function fakeSubmit(e,msg){ e.preventDefault(); toast(msg); return false; }
-
-    // giving: append to recent table
-    document.getElementById('givingForm').addEventListener('submit', function(e){
-      e.preventDefault();
-      const amt = Number(document.getElementById('amount').value || 0).toFixed(2);
-      const fund = document.getElementById('fund').value;
-      const tb = document.getElementById('givingTable');
-      const tr = document.createElement('tr');
-      const d = new Date();
-      tr.innerHTML = `<td>${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}</td><td>${fund}</td><td>$${amt}</td>`;
-      tb.prepend(tr);
-      toast('Thank you for your gift!');
-      this.reset();
-    });
-
-    // prayer board
-    function addPrayer(e){
-      e.preventDefault();
-      const name = document.getElementById('prayerName').value.trim() || 'Anonymous';
-      const text = document.getElementById('prayerText').value.trim();
-      if(!text) return false;
-      const list = document.getElementById('prayerList');
-      const card = document.createElement('details');
-      card.className = 'card';
-      card.style.padding = '10px'; card.style.marginBottom = '10px';
-      card.open = true;
-      card.innerHTML = `<summary><strong>${name}</strong> · <span class="chip chip-green">1 person praying</span></summary><p>${text}</p><button class="btn btn-outline" onclick="incrementPrayers(this)">I prayed</button>`;
-      list.prepend(card);
-      document.getElementById('prayerForm').reset();
-      toast('Prayer posted');
-      return false;
-    }
-    function incrementPrayers(btn){
-      const sum = btn.parentElement.querySelector('summary .chip');
-      const t = sum.textContent.trim();
-      const n = parseInt(t.match(/\d+/)?.[0]||'0',10)+1;
-      sum.textContent = `${n} people praying`;
-      toast('Amen');
-    }
-
-    // devotionals
-    function updateDevotionalPreview(){
-      const f = document.getElementById('devFreq').value;
-      const time = document.getElementById('devTime').value || '08:00';
-      const prompt = document.getElementById('devPrompt').value.trim();
-      const p = document.getElementById('devPreview');
-      p.textContent = `${capitalize(f)} reminder at ${time} — ${prompt}`;
-    }
-    function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
-
-    // announcements
-    function addAnnouncement(e){
-      e.preventDefault();
-      const title = document.getElementById('annTitle').value.trim();
-      const date = document.getElementById('annDate').value;
-      const body = document.getElementById('annBody').value.trim();
-      if(!title||!date||!body) return false;
-      const li = document.createElement('li');
-      const d = new Date(date);
-      const pretty = d.toLocaleDateString(undefined,{month:'short', day:'numeric'});
-      li.innerHTML = `<strong>${escapeHtml(title)}</strong> — ${pretty}: ${escapeHtml(body)}`;
-      document.getElementById('bulletin').prepend(li);
-      document.getElementById('announceForm').reset();
-      toast('Announcement posted');
-      return false;
-    }
-
-    // journal
-    const journal = [];
-    function saveJournal(){
-      const title = document.getElementById('jTitle').value.trim()||'Untitled';
-      const date = document.getElementById('jDate').value|| new Date().toISOString().slice(0,10);
-      const prompt = document.getElementById('jPrompt').value.trim();
-      const body = document.getElementById('jBody').value.trim();
-      const entry = {title, date, prompt, body};
-      journal.unshift(entry);
-      const li = document.createElement('li');
-      li.textContent = `${formatMD(date)} — ${title}`;
-      document.getElementById('journalList').prepend(li);
-      document.getElementById('jBody').value='';
-      toast('Journal saved');
-    }
-    function exportJournal(){
-      const blob = new Blob([JSON.stringify(journal, null, 2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'journal.json'; a.click();
-      setTimeout(()=>URL.revokeObjectURL(url), 500);
-    }
-
-    // volunteers
-    function renderRoster(){
-      const team = document.getElementById('team').value;
-      const presets = { ushers:['Ava','Noah','Liam','Mia','Ezra','Zoe'], greeters:['Caleb','Emma','Mason','Luna'], choir:['Faith','Joy','Grace','Michael','David','Chloe','Aaron'] };
-      document.getElementById('names').value = presets[team].join(', ');
-    }
-    function generateSchedule(){
-      const weeks = Math.max(1, Math.min(12, parseInt(document.getElementById('weeks').value||'4',10)));
-      const names = document.getElementById('names').value.split(',').map(s=>s.trim()).filter(Boolean);
-      if(names.length===0) return toast('Add names to the roster');
-      const perWeek = Math.max(2, Math.ceil(names.length/3));
-      const tbody = document.querySelector('#scheduleTable tbody');
-      tbody.innerHTML='';
-      let idx = 0;
-      for(let w=1; w<=weeks; w++){
-        const assigned = [];
-        for(let i=0;i<perWeek;i++){
-          assigned.push(names[idx % names.length]);
-          idx++;
-        }
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${w}</td><td>${assigned.join(', ')}</td>`;
-        tbody.appendChild(tr);
-      }
-      toast('Schedule generated');
-    }
-
-    // helpers
-    function escapeHtml(s){ return s.replace(/[&<>"']/g, m=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]) ); }
-    function formatMD(dateStr){ const d = new Date(dateStr); return `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}` }
-
-    // init
+    document.getElementById('modeBtn').addEventListener('click', () => { const html = document.documentElement; html.setAttribute('data-theme', html.getAttribute('data-theme') === 'light' ? 'dark' : 'light'); });
+    function prefill(n){ const a = document.getElementById('amount'); a.value = n.toFixed ? n.toFixed(2) : n; toast('Amount set to $'+a.value) }
+    document.getElementById('givingForm').addEventListener('submit', function(e){ e.preventDefault(); const amt = Number(document.getElementById('amount').value || 0).toFixed(2); const fund = document.getElementById('fund').value; const tb = document.getElementById('givingTable'); const tr = document.createElement('tr'); const d = new Date(); tr.innerHTML = '<td>'+String(d.getMonth()+1).toString().padStart(2,'0')+'/'+String(d.getDate()).toString().padStart(2,'0')+'</td><td>'+fund+'</td><td>$'+amt+'</td>'; tb.prepend(tr); toast('Thank you for your gift!'); this.reset(); });
+    function addPrayer(e){ e.preventDefault(); const name = document.getElementById('prayerName').value.trim() || 'Anonymous'; const text = document.getElementById('prayerText').value.trim(); if(!text) return false; const list = document.getElementById('prayerList'); const card = document.createElement('details'); card.className = 'card'; card.style.padding = '10px'; card.style.marginBottom = '10px'; card.open = true; card.innerHTML = '<summary><strong>'+name+'</strong> · <span class="pill">1 praying</span></summary><p>'+escapeHtml(text)+'</p><button class="btn btn-ghost" onclick="incrementPrayers(this)">I prayed</button>'; list.prepend(card); document.getElementById('prayerForm').reset(); toast('Prayer posted'); return false; }
+    function incrementPrayers(btn){ const pill = btn.parentElement.querySelector('summary .pill'); const t = pill.textContent.trim(); const n = parseInt((t.match(/[0-9]+/)||['0'])[0],10)+1; pill.textContent = n+' praying'; toast('Amen'); }
+    function updateDevotionalPreview(){ const f = document.getElementById('devFreq').value; const time = document.getElementById('devTime').value || '08:00'; const prompt = document.getElementById('devPrompt').value.trim(); const p = document.getElementById('devPreview'); p.textContent = (f.charAt(0).toUpperCase()+f.slice(1))+' reminder at '+time+' - '+prompt; }
+    function addAnnouncement(e){ e.preventDefault(); const title = document.getElementById('annTitle').value.trim(); const date = document.getElementById('annDate').value; const body = document.getElementById('annBody').value.trim(); if(!title||!date||!body) return false; const li = document.createElement('li'); const d = new Date(date); const pretty = d.toLocaleDateString(undefined,{month:'short', day:'numeric'}); li.innerHTML = '<strong>'+escapeHtml(title)+'</strong> - '+pretty+': '+escapeHtml(body); document.getElementById('bulletin').prepend(li); document.getElementById('announceForm').reset(); toast('Announcement posted'); return false; }
+    const journal = []; function saveJournal(){ const title = document.getElementById('jTitle').value.trim()||'Untitled'; const date = document.getElementById('jDate').value|| new Date().toISOString().slice(0,10); const prompt = document.getElementById('jPrompt').value.trim(); const body = document.getElementById('jBody').value.trim(); const entry = {title, date, prompt, body}; journal.unshift(entry); const li = document.createElement('li'); li.textContent = formatMD(date)+' - '+title; document.getElementById('journalList').prepend(li); document.getElementById('jBody').value=''; toast('Journal saved'); }
+    function exportJournal(){ const blob = new Blob([JSON.stringify(journal, null, 2)], {type:'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'journal.json'; a.click(); setTimeout(()=>URL.revokeObjectURL(url), 400); }
+    function renderRoster(){ const team = document.getElementById('team').value; const presets = { ushers:['Ava','Noah','Liam','Mia','Ezra','Zoe'], greeters:['Caleb','Emma','Mason','Luna'], choir:['Faith','Joy','Grace','Michael','David','Chloe','Aaron'] }; document.getElementById('names').value = presets[team].join(', '); }
+    function generateSchedule(){ const weeks = Math.max(1, Math.min(12, parseInt(document.getElementById('weeks').value||'4',10))); const names = document.getElementById('names').value.split(',').map(function(s){return s.trim()}).filter(Boolean); if(names.length===0) return toast('Add names to the roster'); const perWeek = Math.max(2, Math.ceil(names.length/3)); const tbody = document.querySelector('#scheduleTable tbody'); tbody.innerHTML=''; let idx = 0; for(let w=1; w<=weeks; w++){ const assigned = []; for(let i=0;i<perWeek;i++){ assigned.push(names[idx % names.length]); idx++; } const tr = document.createElement('tr'); tr.innerHTML = '<td>'+w+'</td><td>'+assigned.join(', ')+'</td>'; tbody.appendChild(tr); } toast('Schedule generated'); }
+    function escapeHtml(s){ var map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}; return s.replace(/[&<>"']/g, function(m){ return map[m] }) }
+    function formatMD(dateStr){ const d = new Date(dateStr); return String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0') }
     document.getElementById('yr').textContent = new Date().getFullYear();
     updateDevotionalPreview();
   </script>
