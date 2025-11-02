@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rt in PRpse — Holiday MVP</title>
   <style>
-    :root{
+    :root{ 
       --green:#0f7b46;   /* evergreen */
       --green-600:#0b5a34;
       --green-100:#e7f3ec;
