@@ -1,566 +1,522 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rt in PRpse — Holiday MVP</title>
-  <style>
-    :root{ 
-      --green:#0f7b46;   /* evergreen */
-      --green-600:#0b5a34;
-      --green-100:#e7f3ec;
-      --red:#c62828;     /* holly red */
-      --red-700:#8b1c1c;
-      --red-100:#fdeaea;
-      --gold:#d4af37;
-      --ink:#192027;
-      --muted:#6b7280;
-      --bg:#fafafa;
-      --card:#ffffff;
-      --ring: rgba(198,40,40,.25);
-    }
-
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      background: var(--bg); color:var(--ink); line-height:1.5;
-    }
-    a{color:var(--green)}
-    header{
-      position:sticky; top:0; z-index:50; backdrop-filter:saturate(120%) blur(6px);
-      background:linear-gradient(90deg, var(--green) 0%, var(--green-600) 60%, var(--red-700) 100%);
-      color:#fff; border-bottom:2px solid rgba(255,255,255,.15);
-    }
-    .container{ max-width:1100px; margin-inline:auto; padding: 0 20px; }
-    .topbar{ display:flex; align-items:center; gap:14px; padding:14px 0; flex-wrap:wrap; }
-    .brand{ display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px; }
-    .badge{ background:var(--gold); color:#231800; font-weight:700; padding:2px 8px; border-radius:999px; font-size:12px; }
-    nav{ margin-left:auto; display:flex; gap:10px; flex-wrap:wrap; }
-    nav a{ color:#fff; text-decoration:none; padding:8px 10px; border-radius:10px; font-weight:600; }
-    nav a:hover{ background:rgba(255,255,255,.12) }
-
-    .hero{
-      background: radial-gradient(1200px 400px at 10% -10%, var(--red-100), transparent),
-                  radial-gradient(1000px 400px at 90% -20%, var(--green-100), transparent);
-      border-bottom:1px solid #eee;
-    }
-    .hero .wrap{ padding:40px 0 26px }
-    h1{ margin:0; font-size: clamp(28px, 4vw, 42px); }
-    .tagline{ color:#1f2937; max-width:60ch; margin-top:8px }
-    .cta{ display:flex; gap:12px; margin-top:16px; flex-wrap:wrap }
-    .btn{ appearance:none; border:0; padding:10px 14px; border-radius:12px; font-weight:700; cursor:pointer; }
-    .btn-primary{ background: linear-gradient(90deg, var(--green), var(--red)); color:#fff; }
-    .btn-outline{ background:#fff; color:var(--green); border:2px solid var(--green); }
-
-    .grid{ display:grid; gap:16px; grid-template-columns: repeat(12, 1fr); }
-    .card{ background:var(--card); border:1px solid #e5e7eb; border-radius:16px; padding:16px; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
-    .card h3{ margin:0 0 10px 0; font-size:20px }
-    .card .sub{ color:var(--muted); font-size: 13px; margin-top:-6px; margin-bottom:8px }
-    .section-title{ display:flex; align-items:baseline; justify-content:space-between; margin:22px 0 10px; }
-
-    /* inputs */
-    label{ font-weight:600; font-size:13px }
-    input, select, textarea{
-      width:100%; padding:10px 12px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; color:var(--ink);
-      outline: none; transition: box-shadow .15s, border-color .15s;
-    }
-    input:focus, select:focus, textarea:focus{ border-color:var(--red); box-shadow:0 0 0 4px var(--ring) }
-    textarea{ min-height:96px; resize:vertical }
-    .row{ display:grid; gap:12px; grid-template-columns:1fr 1fr }
-    .help{ font-size:12px; color:var(--muted) }
-
-    /* status chips */
-    .chip{ display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px; font-size:12px; font-weight:700 }
-    .chip-green{ background: var(--green-100); color: var(--green-600) }
-    .chip-red{ background: var(--red-100); color: var(--red-700) }
-
-    /* tables */
-    table{ width:100%; border-collapse:separate; border-spacing:0; }
-    th, td{ padding:10px 12px; text-align:left; border-bottom:1px solid #eee }
-    th{ font-size:12px; letter-spacing:.3px; text-transform:uppercase; color:var(--muted) }
-    tr:hover td{ background:#fafafa }
-
-    /* layout placements */
-    .span-12{ grid-column: span 12 }
-    .span-8{ grid-column: span 8 }
-    .span-4{ grid-column: span 4 }
-    .span-6{ grid-column: span 6 }
-
-    /* footer */
-    footer{ margin-top:36px; padding:24px 0; border-top:1px solid #eee; color:#4b5563; font-size:14px }
-
-    /* small screens */
-    @media (max-width:900px){
-      .row{ grid-template-columns:1fr }
-      .span-8, .span-6, .span-4{ grid-column: span 12 }
-      nav{ width:100%; margin-left:0 }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Grace Community Church</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="components.css" />
 </head>
 <body>
-  <header>
-    <div class="container">
-      <div class="topbar">
-        <div class="brand" aria-label="Rt in PRpse brand">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" fill="url(#g)" />
-            <path d="M12 6v12M6 12h12" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-            <defs>
-              <linearGradient id="g" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#0f7b46"/><stop offset="1" stop-color="#c62828"/>
-              </linearGradient>
-            </defs>
-          </svg>
-          <div>
-            <div style="font-size:18px">Rt in PRpse</div>
-            <div class="badge" title="Rooted in Purpose">Rooted in Purpose</div>
-          </div>
-        </div>
-        <nav aria-label="Primary">
-          <a href="#giving">Giving</a>
-          <a href="#prayers">Prayer Board</a>
-          <a href="#devotionals">Devotionals</a>
-          <a href="#announcements">Announcements</a>
-          <a href="#journal">Journal</a>
-          <a href="#volunteers">Volunteers</a>
-        </nav>
+
+<!-- ============================================================
+     TOP NAV
+     ============================================================ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">✝</span>
+      <span class="brand-text">Grace Community</span>
+    </div>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab-btn active" data-page="home">Home</button>
+      <button class="tab-btn" data-page="calendar">Calendar &amp; Bible Study</button>
+      <button class="tab-btn" data-page="discussion">Discussion</button>
+      <button class="tab-btn" data-page="news">News &amp; Events</button>
+      <button class="tab-btn" data-page="prayer">Prayer Wall</button>
+    </nav>
+
+    <div class="topbar-actions">
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+      <div id="loggedOutActions">
+        <button class="btn btn-ghost btn-sm" id="openLogin">Log in</button>
+        <button class="btn btn-primary btn-sm" id="openSignup">Sign up</button>
+      </div>
+      <div id="loggedInActions" style="display:none">
+        <button class="account-chip" id="openProfile">
+          <span class="account-avatar" id="navAvatar">G</span>
+          <span id="navName">Guest</span>
+        </button>
       </div>
     </div>
-  </header>
+  </div>
+</header>
+
+<!-- ============================================================
+     HOME PAGE
+     ============================================================ -->
+<main class="page active" id="page-home">
 
   <section class="hero">
-    <div class="container wrap">
-      <h1>Welcome to Rt in PRpse</h1>
-      <p class="tagline">A simple platform for small churches to manage giving, share prayers, schedule devotionals, post updates, and organize volunteers — all in one place with a festive green and red theme for the season.</p>
-      <div class="cta">
-        <a class="btn btn-primary" href="#giving">Give Now</a>
-        <a class="btn btn-outline" href="#devotionals">Today’s Devotional</a>
+    <div class="wrap hero-grid">
+      <div>
+        <div class="hero-eyebrow">✝ Welcome home</div>
+        <h1>A place to <em>belong</em>, grow, and serve together.</h1>
+        <p class="hero-sub">Grace Community is a family of believers in Arlington Heights. Whether you're exploring faith for the first time or looking for your next study group, there's a seat for you here.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="goToPage('calendar')">View Bible study schedule</button>
+          <button class="btn btn-ghost" onclick="goToPage('prayer')">Submit a prayer request</button>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-num">412</div>
+            <div class="hero-stat-label">Members</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">18</div>
+            <div class="hero-stat-label">Weekly groups</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">9</div>
+            <div class="hero-stat-label">Years serving Arlington Heights</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-art">
+        <div class="hero-art-ring"></div>
+        <div class="hero-art-shape">
+          <img src="https://images.pexels.com/photos/8468470/pexels-photo-8468470.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Congregation gathered together in worship" />
+        </div>
+        <div class="hero-art-badge">
+          <div class="hero-art-badge-icon">📖</div>
+          <div>
+            <div class="hero-art-badge-title">Sunday Study</div>
+            <div class="hero-art-badge-sub">9:30 AM · Fellowship Hall</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <main class="container" style="padding:22px 0 40px">
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Get connected</div>
+          <h2 class="section-title">Everything your church family needs</h2>
+        </div>
+      </div>
 
-    <!-- GIVING -->
-    <div id="giving" class="section-title">
-      <h2 style="margin:0">Tithes and Offerings</h2>
-      <span class="chip chip-green">Secure</span>
-    </div>
-    <div class="grid">
-      <div class="card span-8">
-        <h3>Online Giving</h3>
-        <p class="sub">Support your church with a one time gift or set up recurring giving.</p>
-        <form id="givingForm" onsubmit="return fakeSubmit(event, 'Thank you for your gift!')">
-          <div class="row">
-            <div>
-              <label for="amount">Amount (USD)</label>
-              <input id="amount" type="number" min="1" step="0.01" placeholder="50.00" required />
-              <p class="help">Example values: 10, 25, 50, 100</p>
-            </div>
-            <div>
-              <label for="frequency">Frequency</label>
-              <select id="frequency">
-                <option>One Time</option>
-                <option>Weekly</option>
-                <option>Biweekly</option>
-                <option>Monthly</option>
-              </select>
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label for="fund">Fund</label>
-              <select id="fund">
-                <option>Tithes</option>
-                <option>Offering</option>
-                <option>Building</option>
-                <option>Missions</option>
-              </select>
-            </div>
-            <div>
-              <label for="name">Full Name</label>
-              <input id="name" type="text" placeholder="First Last" required />
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label for="email">Email</label>
-              <input id="email" type="email" placeholder="you@example.com" required />
-            </div>
-            <div>
-              <label for="note">Note (optional)</label>
-              <input id="note" type="text" placeholder="Blessings" />
-            </div>
-          </div>
-          <button class="btn btn-primary" type="submit">Give Securely</button>
-        </form>
-      </div>
-      <div class="card span-4">
-        <h3>Recent Giving</h3>
-        <table aria-label="recent gifts">
-          <thead><tr><th>Date</th><th>Fund</th><th>Amount</th></tr></thead>
-          <tbody id="givingTable">
-            <tr><td>11/02</td><td>Tithes</td><td>$100.00</td></tr>
-            <tr><td>10/26</td><td>Offering</td><td>$25.00</td></tr>
-            <tr><td>10/19</td><td>Building</td><td>$50.00</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- PRAYER BOARD -->
-    <div id="prayers" class="section-title">
-      <h2 style="margin:0">Prayer Board</h2>
-      <span class="chip chip-red">New this week</span>
-    </div>
-    <div class="grid">
-      <div class="card span-6">
-        <h3>Post a Prayer</h3>
-        <form id="prayerForm" onsubmit="return addPrayer(event)">
-          <div class="row">
-            <div>
-              <label for="prayerName">Name</label>
-              <input id="prayerName" placeholder="You can post as Anonymous" />
-            </div>
-            <div>
-              <label for="group">Group</label>
-              <select id="group">
-                <option>General</option>
-                <option>Men</option>
-                <option>Women</option>
-                <option>Youth</option>
-                <option>Choir</option>
-              </select>
-            </div>
-          </div>
-          <label for="prayerText">Request</label>
-          <textarea id="prayerText" placeholder="Type your prayer request" required></textarea>
-          <label style="display:flex; align-items:center; gap:8px; margin-top:8px">
-            <input id="anon" type="checkbox"> Post as Anonymous
-          </label>
-          <button class="btn btn-primary" type="submit">Share Request</button>
-        </form>
-      </div>
-      <div class="card span-6">
-        <h3>Requests</h3>
-        <div id="prayerList" aria-live="polite">
-          <details open class="card" style="padding:10px; margin-bottom:10px">
-            <summary><strong>For healing</strong> · <span class="chip chip-green">5 people praying</span></summary>
-            <p>Praying for recovery after surgery.</p>
-            <button class="btn btn-outline" onclick="incrementPrayers(this)">I prayed</button>
-          </details>
-          <details class="card" style="padding:10px">
-            <summary><strong>Guidance</strong> · <span class="chip chip-green">2 people praying</span></summary>
-            <p>Seeking direction for a new job.</p>
-            <button class="btn btn-outline" onclick="incrementPrayers(this)">I prayed</button>
-          </details>
+      <div class="quick-grid">
+        <div class="quick-card">
+          <div class="quick-icon purple">🗓</div>
+          <h3>Calendar &amp; Bible Study</h3>
+          <p>See every service, study, and event — and schedule new Bible study sessions.</p>
+          <a class="quick-link" onclick="goToPage('calendar')" href="#">Open calendar →</a>
+        </div>
+        <div class="quick-card">
+          <div class="quick-icon gold">💬</div>
+          <h3>Discussion Board</h3>
+          <p>Ask questions, share reflections, and grow in faith together online.</p>
+          <a class="quick-link" onclick="goToPage('discussion')" href="#">Join the conversation →</a>
+        </div>
+        <div class="quick-card">
+          <div class="quick-icon purple">📰</div>
+          <h3>News &amp; Events</h3>
+          <p>Stay current on what's happening across our ministries and campus.</p>
+          <a class="quick-link" onclick="goToPage('news')" href="#">See what's new →</a>
+        </div>
+        <div class="quick-card">
+          <div class="quick-icon gold">🙏</div>
+          <h3>Prayer Wall</h3>
+          <p>Submit a request and stand with others in prayer — anonymously if you'd like.</p>
+          <a class="quick-link" onclick="goToPage('prayer')" href="#">Visit the prayer wall →</a>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- DEVOTIONALS -->
-    <div id="devotionals" class="section-title">
-      <h2 style="margin:0">Devotional Scheduler</h2>
-      <span class="chip chip-green">Daily and Weekly</span>
+  <section class="section-tight">
+    <div class="wrap">
+      <div class="verse-band">
+        <p class="verse-text">"For where two or three gather in my name, there am I with them."</p>
+        <div class="verse-ref">MATTHEW 18:20</div>
+      </div>
     </div>
-    <div class="grid">
-      <div class="card span-8">
-        <h3>Today’s Devotional</h3>
-        <p class="sub">“Let your roots grow down into Him.” Colossians 2:7</p>
-        <div class="row">
-          <div>
-            <label for="devFreq">Frequency</label>
-            <select id="devFreq" onchange="updateDevotionalPreview()">
-              <option value="daily" selected>Daily</option>
-              <option value="weekly">Weekly</option>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">This week</div>
+          <h2 class="section-title">Upcoming on the calendar</h2>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="goToPage('calendar')">View full calendar</button>
+      </div>
+      <div class="card" id="homeUpcomingList"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     CALENDAR + BIBLE STUDY PAGE
+     ============================================================ -->
+<main class="page" id="page-calendar">
+  <div class="page-header">
+    <div class="wrap">
+      <div class="eyebrow">Plan ahead</div>
+      <h2 class="section-title">Calendar &amp; Bible Study</h2>
+      <p class="section-sub">Browse everything happening at Grace Community, and schedule new Bible study sessions for your group.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cal-shell">
+        <div class="card">
+          <div class="cal-head">
+            <div class="cal-title" id="calMonthLabel">April 2026</div>
+            <div class="cal-nav">
+              <button class="cal-nav-btn" id="calPrev">‹</button>
+              <button class="cal-nav-btn" id="calNext">›</button>
+            </div>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+        </div>
+
+        <div class="card">
+          <div class="cal-side-title">All events</div>
+          <div id="calSideList"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Bible study</div>
+          <h2 class="section-title">Schedule a session</h2>
+        </div>
+      </div>
+
+      <div class="scheduler-shell">
+        <div class="card">
+          <div class="field">
+            <label>Session title</label>
+            <input type="text" id="inp-title" placeholder="e.g. Book of Romans, Chapter 5" />
+          </div>
+          <div class="field">
+            <label>Leader / facilitator</label>
+            <input type="text" id="inp-leader" placeholder="Pastor or group leader name" />
+          </div>
+          <div class="field">
+            <label>Date</label>
+            <input type="date" id="inp-date" />
+          </div>
+          <div class="field">
+            <label>Time</label>
+            <input type="time" id="inp-time" />
+          </div>
+          <div class="field">
+            <label>Location</label>
+            <input type="text" id="inp-location" placeholder="e.g. Fellowship Hall, Room 3" />
+          </div>
+          <div class="field">
+            <label>Format</label>
+            <select id="inp-format">
+              <option value="In-person">In-person</option>
+              <option value="Online">Online</option>
+              <option value="Hybrid">Hybrid</option>
             </select>
           </div>
-          <div>
-            <label for="devTime">Reminder Time</label>
-            <input id="devTime" type="time" value="08:00" onchange="updateDevotionalPreview()" />
+          <div class="field">
+            <label>Notes (optional)</label>
+            <textarea id="inp-notes" placeholder="Passage reference, materials needed, etc."></textarea>
           </div>
+          <button class="btn btn-primary btn-block" onclick="addSession()">Add session</button>
         </div>
-        <label for="devPrompt">Prompt</label>
-        <textarea id="devPrompt" oninput="updateDevotionalPreview()">Reflect on one way you saw God’s faithfulness this week.</textarea>
-        <div class="card" style="background:var(--green-100); border-color: var(--green); margin-top:10px">
-          <strong>Preview</strong>
-          <p id="devPreview" style="margin:6px 0 0">Daily reminder at 08:00 — Reflect on one way you saw God’s faithfulness this week.</p>
-        </div>
-        <div style="margin-top:10px">
-          <button class="btn btn-primary" onclick="fakeSubmit(event, 'Devotional reminder saved')">Save Reminder</button>
-        </div>
-      </div>
-      <div class="card span-4">
-        <h3>Template Library</h3>
-        <ul id="templateList" style="margin:0; padding-left:18px">
-          <li>Gratitude: Name three blessings today.</li>
-          <li>Scripture: Meditate on Psalm 23.</li>
-          <li>Service: Plan one act of kindness.</li>
-          <li>Prayer: Pray for a neighbor.</li>
-        </ul>
-      </div>
-    </div>
 
-    <!-- ANNOUNCEMENTS -->
-    <div id="announcements" class="section-title">
-      <h2 style="margin:0">Monthly Announcements</h2>
-      <span class="chip chip-red">December Preview</span>
+        <div class="card">
+          <div class="filter-row">
+            <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+            <button class="filter-btn" onclick="setFilter('In-person', this)">In-person</button>
+            <button class="filter-btn" onclick="setFilter('Online', this)">Online</button>
+            <button class="filter-btn" onclick="setFilter('Hybrid', this)">Hybrid</button>
+          </div>
+          <div id="session-list"></div>
+        </div>
+      </div>
     </div>
-    <div class="grid">
-      <div class="card span-6">
-        <h3>Create Announcement</h3>
-        <form id="announceForm" onsubmit="return addAnnouncement(event)">
-          <div class="row">
-            <div>
-              <label for="annTitle">Title</label>
-              <input id="annTitle" placeholder="Choir rehearsal" required />
+  </section>
+</main>
+
+<!-- ============================================================
+     DISCUSSION BOARD PAGE
+     ============================================================ -->
+<main class="page" id="page-discussion">
+  <div class="page-header">
+    <div class="wrap">
+      <div class="eyebrow">Community</div>
+      <h2 class="section-title">Discussion Board</h2>
+      <p class="section-sub">Open to everyone to read. Log in to post a question, reflection, or reply.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="wrap discuss-shell">
+      <div>
+        <div class="card thread-composer">
+          <div class="field">
+            <textarea id="threadInput" placeholder="Share a reflection or ask a question..."></textarea>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="postThread()">Post to board</button>
+        </div>
+
+        <div id="threadList"></div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="cal-side-title">Board guidelines</div>
+          <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.6">
+            Be kind, stay on topic, and keep this a safe space for honest questions. Posting requires an account; reading is open to all.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============================================================
+     NEWS & EVENTS PAGE
+     ============================================================ -->
+<main class="page" id="page-news">
+  <div class="page-header">
+    <div class="wrap">
+      <div class="eyebrow">Stay in the loop</div>
+      <h2 class="section-title">News &amp; Events</h2>
+      <p class="section-sub">Announcements, ministry updates, and what's coming up at Grace Community.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="news-featured" id="newsFeatured"></div>
+      <div class="news-grid" id="newsGrid"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ============================================================
+     PRAYER WALL PAGE
+     ============================================================ -->
+<main class="page" id="page-prayer">
+  <div class="page-header">
+    <div class="wrap">
+      <div class="eyebrow">Pray together</div>
+      <h2 class="section-title">Prayer Wall</h2>
+      <p class="section-sub">Submit a request — anonymously if you prefer — and join others in praying over what matters most.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="prayer-intro">
+        <div class="card prayer-form">
+          <div class="cal-side-title">Submit a prayer request</div>
+          <div class="field-row">
+            <div class="field">
+              <label>Your name</label>
+              <input type="text" id="prayerName" placeholder="Jane Doe" />
             </div>
-            <div>
-              <label for="annDate">Date</label>
-              <input id="annDate" type="date" required />
+            <div class="field">
+              <label>&nbsp;</label>
+              <div class="checkbox-row" style="padding-top:10px">
+                <input type="checkbox" id="prayerAnon" />
+                <label for="prayerAnon" style="margin:0;font-weight:500">Submit anonymously</label>
+              </div>
             </div>
           </div>
-          <label for="annBody">Details</label>
-          <textarea id="annBody" placeholder="Write details…" required></textarea>
-          <button class="btn btn-primary" type="submit">Post Announcement</button>
-        </form>
-      </div>
-      <div class="card span-6">
-        <h3>Bulletin</h3>
-        <ul id="bulletin" style="margin:0; padding-left:18px">
-          <li><strong>Christmas Service</strong> — Dec 24 at 6 PM</li>
-          <li><strong>Toy Drive</strong> — Drop off by Dec 15</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- JOURNAL -->
-    <div id="journal" class="section-title">
-      <h2 style="margin:0">Prayer Journal</h2>
-      <span class="chip chip-green">Private</span>
-    </div>
-    <div class="grid">
-      <div class="card span-8">
-        <h3>New Entry</h3>
-        <div class="row">
-          <div>
-            <label for="jTitle">Title</label>
-            <input id="jTitle" placeholder="Morning gratitude" />
+          <div class="field">
+            <label>Your prayer request</label>
+            <textarea id="prayerText" placeholder="Share what's on your heart..."></textarea>
           </div>
-          <div>
-            <label for="jDate">Date</label>
-            <input id="jDate" type="date" />
-          </div>
+          <button class="btn btn-gold btn-block" onclick="submitPrayer()">Submit prayer request</button>
         </div>
-        <label for="jPrompt">Guided Reflection</label>
-        <textarea id="jPrompt">Where did you sense peace today?</textarea>
-        <label for="jBody">Notes</label>
-        <textarea id="jBody" placeholder="Write your thoughts…"></textarea>
-        <button class="btn btn-primary" onclick="saveJournal()">Save Entry</button>
-        <button class="btn btn-outline" onclick="exportJournal()">Export as JSON</button>
-      </div>
-      <div class="card span-4">
-        <h3>Saved Entries</h3>
-        <ul id="journalList" style="margin:0; padding-left:18px">
-          <li>10/19 — Trust and patience</li>
-          <li>10/26 — Gratitude list</li>
-        </ul>
-      </div>
-    </div>
 
-    <!-- VOLUNTEERS -->
-    <div id="volunteers" class="section-title">
-      <h2 style="margin:0">Volunteer Rotation</h2>
-      <span class="chip chip-red">Auto schedule</span>
-    </div>
-    <div class="grid">
-      <div class="card span-8">
-        <h3>Build Rotation</h3>
-        <div class="row">
-          <div>
-            <label for="team">Team</label>
-            <select id="team" onchange="renderRoster()">
-              <option value="ushers" selected>Ushers</option>
-              <option value="greeters">Greeters</option>
-              <option value="choir">Choir</option>
-            </select>
-          </div>
-          <div>
-            <label for="weeks">Weeks</label>
-            <input id="weeks" type="number" min="1" max="12" value="4" />
-          </div>
-        </div>
-        <label for="names">Roster (comma separated)</label>
-        <input id="names" value="Ava, Noah, Liam, Mia, Ezra, Zoe" />
-        <button class="btn btn-primary" onclick="generateSchedule()">Generate Schedule</button>
-        <div class="card" style="margin-top:12px">
-          <table id="scheduleTable">
-            <thead><tr><th>Week</th><th>Assignments</th></tr></thead>
-            <tbody>
-              <tr><td>1</td><td>Ava, Noah</td></tr>
-              <tr><td>2</td><td>Liam, Mia</td></tr>
-            </tbody>
-          </table>
+        <div class="card">
+          <div class="cal-side-title">How this works</div>
+          <p style="font-size:0.86rem;color:var(--text-secondary);line-height:1.7">
+            Every request submitted here is visible on the wall below so our church family can pray over it together. Choose "submit anonymously" if you'd rather not share your name. Tap "I'm praying" on any card to let the wall know you've lifted it up.
+          </p>
         </div>
       </div>
-      <div class="card span-4">
-        <h3>Reminders</h3>
-        <label style="display:flex; align-items:center; gap:8px">
-          <input id="sms" type="checkbox" checked> Send SMS reminders
-        </label>
-        <label style="display:flex; align-items:center; gap:8px; margin-top:6px">
-          <input id="emailR" type="checkbox" checked> Send Email reminders
-        </label>
-        <button class="btn btn-outline" style="margin-top:10px" onclick="fakeSubmit(event, 'Reminders saved')">Save</button>
+
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">The wall</div>
+          <h2 class="section-title" style="font-size:1.4rem">Current requests</h2>
+        </div>
+      </div>
+      <div class="prayer-grid" id="prayerGrid"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ============================================================
+     ACCOUNT / PROFILE PAGE (logged in)
+     ============================================================ -->
+<main class="page" id="page-profile">
+  <div class="page-header">
+    <div class="wrap">
+      <div class="eyebrow">Your account</div>
+      <h2 class="section-title">Profile &amp; Settings</h2>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="wrap profile-shell">
+      <div class="card profile-card">
+        <div class="profile-avatar-lg" id="profileAvatarLg">G</div>
+        <div class="profile-name" id="profileNameLg">Guest</div>
+        <div class="profile-email" id="profileEmailLg">guest@example.com</div>
+        <button class="btn btn-ghost btn-sm btn-block" onclick="logout()">Log out</button>
+        <div class="profile-stats-row">
+          <div>
+            <div class="profile-stat-num" id="profileThreadCount">0</div>
+            <div class="profile-stat-label">Posts</div>
+          </div>
+          <div>
+            <div class="profile-stat-num" id="profilePrayerCount">0</div>
+            <div class="profile-stat-label">Prayers</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom:1.25rem">
+          <div class="cal-side-title">Personal info</div>
+          <div class="field">
+            <label>Display name</label>
+            <input type="text" id="settingsName" />
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="settingsEmail" />
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="saveProfile()">Save changes</button>
+        </div>
+
+        <div class="card">
+          <div class="cal-side-title">Preferences</div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-label">Email me about new prayer requests</div>
+              <div class="settings-sub">Get notified when someone posts to the prayer wall</div>
+            </div>
+            <button class="toggle on" id="toggle1" onclick="this.classList.toggle('on')"></button>
+          </div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-label">Weekly digest</div>
+              <div class="settings-sub">A Friday summary of news and upcoming events</div>
+            </div>
+            <button class="toggle on" id="toggle2" onclick="this.classList.toggle('on')"></button>
+          </div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-label">Show my name on discussion posts</div>
+              <div class="settings-sub">Turn off to post under "Church Member"</div>
+            </div>
+            <button class="toggle" id="toggle3" onclick="this.classList.toggle('on')"></button>
+          </div>
+        </div>
       </div>
     </div>
+  </section>
+</main>
 
-  </main>
-
-  <footer>
-    <div class="container">
-      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
-        <span>© <span id="yr"></span> Rt in PRpse</span>
-        <span aria-hidden>•</span>
-        <span>Made with care for small churches</span>
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><span class="brand-mark">✝</span> Grace Community</div>
+        <p style="font-size:0.85rem;line-height:1.6;max-width:32ch">A place to belong, grow, and serve — together, in Arlington Heights.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <a href="#" onclick="goToPage('calendar')">Calendar</a>
+        <a href="#" onclick="goToPage('discussion')">Discussion</a>
+        <a href="#" onclick="goToPage('news')">News &amp; Events</a>
+        <a href="#" onclick="goToPage('prayer')">Prayer Wall</a>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <a href="#">Plan a visit</a>
+        <a href="#">Give online</a>
+        <a href="#">Contact us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Service times</h4>
+        <a href="#">Sunday — 9:30 &amp; 11:00 AM</a>
+        <a href="#">Wednesday Study — 7:00 PM</a>
       </div>
     </div>
-  </footer>
+    <div class="footer-bottom">
+      <span>© 2026 Grace Community Church. Demo build — backend &amp; auth coming soon.</span>
+      <span>Built with care.</span>
+    </div>
+  </div>
+</footer>
 
-  <script>
-    // util
-    const toast = (msg) => {
-      const t = document.createElement('div');
-      t.textContent = msg;
-      t.style.cssText = 'position:fixed;inset:auto 20px 20px auto;background:linear-gradient(90deg,var(--green),var(--red));color:#fff;padding:10px 14px;border-radius:12px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.2);z-index:1000';
-      document.body.appendChild(t);
-      setTimeout(()=>t.remove(), 2000);
-    }
-    function fakeSubmit(e,msg){ e.preventDefault(); toast(msg); return false; }
+<!-- ============================================================
+     LOGIN / SIGNUP MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="authModalTitle">Welcome back</h3>
+      <button class="modal-close" onclick="closeAuthModal()">✕</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="loginTab" onclick="switchAuthTab('login')">Log in</button>
+      <button class="modal-tab" id="signupTab" onclick="switchAuthTab('signup')">Sign up</button>
+    </div>
 
-    // giving: append to recent table
-    document.getElementById('givingForm').addEventListener('submit', function(e){
-      e.preventDefault();
-      const amt = Number(document.getElementById('amount').value || 0).toFixed(2);
-      const fund = document.getElementById('fund').value;
-      const tb = document.getElementById('givingTable');
-      const tr = document.createElement('tr');
-      const d = new Date();
-      tr.innerHTML = `<td>${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}</td><td>${fund}</td><td>$${amt}</td>`;
-      tb.prepend(tr);
-      toast('Thank you for your gift!');
-      this.reset();
-    });
+    <div id="loginForm">
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" />
+      </div>
+      <button class="btn btn-primary btn-block" onclick="login()">Log in</button>
+    </div>
 
-    // prayer board
-    function addPrayer(e){
-      e.preventDefault();
-      const name = document.getElementById('prayerName').value.trim() || 'Anonymous';
-      const text = document.getElementById('prayerText').value.trim();
-      if(!text) return false;
-      const list = document.getElementById('prayerList');
-      const card = document.createElement('details');
-      card.className = 'card';
-      card.style.padding = '10px'; card.style.marginBottom = '10px';
-      card.open = true;
-      card.innerHTML = `<summary><strong>${name}</strong> · <span class="chip chip-green">1 person praying</span></summary><p>${text}</p><button class="btn btn-outline" onclick="incrementPrayers(this)">I prayed</button>`;
-      list.prepend(card);
-      document.getElementById('prayerForm').reset();
-      toast('Prayer posted');
-      return false;
-    }
-    function incrementPrayers(btn){
-      const sum = btn.parentElement.querySelector('summary .chip');
-      const t = sum.textContent.trim();
-      const n = parseInt(t.match(/\d+/)?.[0]||'0',10)+1;
-      sum.textContent = `${n} people praying`;
-      toast('Amen');
-    }
+    <div id="signupForm" style="display:none">
+      <div class="field">
+        <label>Full name</label>
+        <input type="text" id="signupName" placeholder="Jane Doe" />
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="signupEmail" placeholder="you@example.com" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="signupPassword" placeholder="••••••••" />
+      </div>
+      <button class="btn btn-primary btn-block" onclick="signup()">Create account</button>
+    </div>
 
-    // devotionals
-    function updateDevotionalPreview(){
-      const f = document.getElementById('devFreq').value;
-      const time = document.getElementById('devTime').value || '08:00';
-      const prompt = document.getElementById('devPrompt').value.trim();
-      const p = document.getElementById('devPreview');
-      p.textContent = `${capitalize(f)} reminder at ${time} — ${prompt}`;
-    }
-    function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+    <div class="modal-foot">Demo mode — no real credentials required, this is mock data only.</div>
+  </div>
+</div>
 
-    // announcements
-    function addAnnouncement(e){
-      e.preventDefault();
-      const title = document.getElementById('annTitle').value.trim();
-      const date = document.getElementById('annDate').value;
-      const body = document.getElementById('annBody').value.trim();
-      if(!title||!date||!body) return false;
-      const li = document.createElement('li');
-      const d = new Date(date);
-      const pretty = d.toLocaleDateString(undefined,{month:'short', day:'numeric'});
-      li.innerHTML = `<strong>${escapeHtml(title)}</strong> — ${pretty}: ${escapeHtml(body)}`;
-      document.getElementById('bulletin').prepend(li);
-      document.getElementById('announceForm').reset();
-      toast('Announcement posted');
-      return false;
-    }
+<!-- Toast -->
+<div class="toast" id="toast"><span class="toast-icon">✦</span><span id="toastMsg"></span></div>
 
-    // journal
-    const journal = [];
-    function saveJournal(){
-      const title = document.getElementById('jTitle').value.trim()||'Untitled';
-      const date = document.getElementById('jDate').value|| new Date().toISOString().slice(0,10);
-      const prompt = document.getElementById('jPrompt').value.trim();
-      const body = document.getElementById('jBody').value.trim();
-      const entry = {title, date, prompt, body};
-      journal.unshift(entry);
-      const li = document.createElement('li');
-      li.textContent = `${formatMD(date)} — ${title}`;
-      document.getElementById('journalList').prepend(li);
-      document.getElementById('jBody').value='';
-      toast('Journal saved');
-    }
-    function exportJournal(){
-      const blob = new Blob([JSON.stringify(journal, null, 2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'journal.json'; a.click();
-      setTimeout(()=>URL.revokeObjectURL(url), 500);
-    }
-
-    // volunteers
-    function renderRoster(){
-      const team = document.getElementById('team').value;
-      const presets = { ushers:['Ava','Noah','Liam','Mia','Ezra','Zoe'], greeters:['Caleb','Emma','Mason','Luna'], choir:['Faith','Joy','Grace','Michael','David','Chloe','Aaron'] };
-      document.getElementById('names').value = presets[team].join(', ');
-    }
-    function generateSchedule(){
-      const weeks = Math.max(1, Math.min(12, parseInt(document.getElementById('weeks').value||'4',10)));
-      const names = document.getElementById('names').value.split(',').map(s=>s.trim()).filter(Boolean);
-      if(names.length===0) return toast('Add names to the roster');
-      const perWeek = Math.max(2, Math.ceil(names.length/3));
-      const tbody = document.querySelector('#scheduleTable tbody');
-      tbody.innerHTML='';
-      let idx = 0;
-      for(let w=1; w<=weeks; w++){
-        const assigned = [];
-        for(let i=0;i<perWeek;i++){
-          assigned.push(names[idx % names.length]);
-          idx++;
-        }
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${w}</td><td>${assigned.join(', ')}</td>`;
-        tbody.appendChild(tr);
-      }
-      toast('Schedule generated');
-    }
-
-    // helpers
-    function escapeHtml(s){ return s.replace(/[&<>"']/g, m=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]) ); }
-    function formatMD(dateStr){ const d = new Date(dateStr); return `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}` }
-
-    // init
-    document.getElementById('yr').textContent = new Date().getFullYear();
-    updateDevotionalPreview();
-  </script>
+<script src="app.js"></script>
 </body>
 </html>
